@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<title>Smartphone Localizer</title>
+		
+		<link rel="stylesheet" href="leaflet.css" />
+		<script src="leaflet.js"></script>
+		<script src="jquery.js"></script>
+	</head>
+	<body>
+		<script>
+			// Update smartphone locations every 5 seconds
+			setInterval(function() {
+				$.ajax({
+					url: "/getsmartphones",
+					success: function(result) {
+						console.log(result);
+					}
+				})
+			}, 5000);
+		</script>
+	</body>
+</html>

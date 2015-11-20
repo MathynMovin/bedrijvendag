@@ -1,0 +1,11 @@
+{
+  "name": "Bedrijvendag",
+  "version": "1.0.0",
+  "description": "Eenvoudige NodeJS applicatie voor de bedrijvendag op Windesheim",
+  "author": "Movin - Mathyn Buiteveld",
+  "dependencies": {
+    "express": "^4.13.3",
+    "request": "^2.67.0",
+    "serve-static": "^1.10.0"
+  }
+}
