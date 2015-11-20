@@ -1,2 +1,2 @@
 # bedrijvendag
-Simple NodeJS applicatie voor de bedrijvendag op Windesheim
+Eenvoudige NodeJS applicatie voor de bedrijvendag op Windesheim
