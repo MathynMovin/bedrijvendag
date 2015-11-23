@@ -8,7 +8,9 @@ app.get("/getsmartphone/:name", function(req, res) {
 	// Dummy data, always returns found = true
 	res.send({
 		found: true,
-		name: req.params.name
+		name: req.params.name,
+		position: [0, 0],
+		floor: 0
 	});
 });
 
@@ -18,11 +20,13 @@ app.get("/getsmartphones", function(req, res) {
 	res.send([
 		{
 			name: "Mathyn",
-			position: [6.079281241290334, 52.501251625059666]
+			position: [6.079281241290334, 52.501251625059666],
+			floor: 5
 		},
 		{
 			name: "Tim",
-			position: [6.079271241290334, 52.501241625059666]
+			position: [6.079271241290334, 52.501241625059666],
+			floor: 5
 		}
 	]);
 });
@@ -31,9 +35,9 @@ app.get("/getsmartphones", function(req, res) {
 app.get("/smartphonehistory/:name", function(req, res) {
 	// Dummy data
 	res.send([
-		[6.079281241290334, 52.501251625059666],
-		[6.079281241290334, 52.501251625059666],
-		[6.079281241290334, 52.501251625059666]
+		[6.079281241290334, 52.501251625059666, 5],
+		[6.079281241290334, 52.501251625059666, 5],
+		[6.079281241290334, 52.501251625059666, 5]
 	]);
 });
 
