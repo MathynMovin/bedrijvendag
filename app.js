@@ -5,29 +5,35 @@ var app = express();
 
 // Retrieves a single smartphone
 app.get("/getsmartphone/:name", function(req, res) {
-	res.send("I don't know where '" + req.params.name + "' is");
+	// Dummy data, always returns found = true
+	res.send({
+		found: true,
+		name: req.params.name
+	});
 });
 
 // Retrieves all smartphones
 app.get("/getsmartphones", function(req, res) {
+	// Dummy data
 	res.send([
 		{
 			name: "Mathyn",
-			position: [52, 7]
+			position: [6.079281241290334, 52.501251625059666]
 		},
 		{
-			name: "Someone else",
-			position: [52, 6]
+			name: "Tim",
+			position: [6.079271241290334, 52.501241625059666]
 		}
 	]);
 });
 
 // Gets the complete movement history for a single smartphone.
 app.get("/smartphonehistory/:name", function(req, res) {
+	// Dummy data
 	res.send([
-		[52, 7],
-		[52, 6],
-		[51, 5]
+		[6.079281241290334, 52.501251625059666],
+		[6.079281241290334, 52.501251625059666],
+		[6.079281241290334, 52.501251625059666]
 	]);
 });
 

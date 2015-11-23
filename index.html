@@ -5,18 +5,151 @@
 		<link rel="stylesheet" href="leaflet.css" />
 		<script src="leaflet.js"></script>
 		<script src="jquery.js"></script>
+		
+		<link rel="stylesheet" href="style.css" />
 	</head>
 	<body>
+		<div id="inputContainer">
+			<table>
+				<tr>
+					<td>Smartphone</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" id="phoneInput">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button id="searchButton">Zoek</button>
+						<button id="clearSearchButton">Clear</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="mapContainer"></div>
 		<script>
+			var currentSmartphones = [];
+			
 			// Update smartphone locations every 5 seconds
 			setInterval(function() {
 				$.ajax({
 					url: "/getsmartphones",
 					success: function(result) {
-						console.log(result);
+						updateMapMarkers(result);
 					}
-				})
+				});
 			}, 5000);
+			
+			// Create the Leaflet map
+			var map = L.map("mapContainer", {
+				center: [52.501251625059666, 6.079281241290334],
+				zoom: 22,
+				minZoom: 18,
+				maxZoom: 22
+			});
+			
+			// Add the Movin indoor map to Leaflet
+			var tileUrl = "http://bedrijvendag.movin.io/wmts?Request=GetTile&" + 
+						  "ApiKey={apiKey}&" + 
+						  "Layer={layer}&" + 
+						  "Style={style}&" + 
+						  "TileFloor={floor}" + 
+						  "&TileZoom={z}&TileCol={x}&TileRow={y}"
+			L.tileLayer(tileUrl, {
+				apiKey: "56263a19e52e1ed222c32f11",
+				layer: "Default",
+				style: "Default",
+				floor: 5,
+				minZoom: 18,
+				maxZoom: 22
+			}).addTo(map);
+			
+			// --------
+			// Event handling
+			// --------
+			$("#searchButton").click(function() {
+				// Make sure at least one character is entered
+				if($("#phoneInput").val().length == 0)
+					return;
+				
+				// Retrieve the smartphone	
+				$.ajax({
+					url: "/getsmartphone/" + $("#phoneInput").val(),
+					success: function(result) {
+						if(!result.found) {
+							alert("Smartphone niet gevonden!");
+						}
+						else {
+							// Highlight found smartphone
+							for(var i = 0; i < currentSmartphones.length; i++) {
+								var smartphone = currentSmartphones[i];
+								
+								if(smartphone.name == result.name) {
+									smartphone.leafletMarker.openPopup();
+								}
+							}
+						}
+					}
+				});
+			});
+			$("#clearSearchButton").click(function() {
+				$("#phoneInput").val("");
+			});
+			
+			// --------
+			// Leaflet functions
+			// --------
+			function updateMapMarkers(newSmartphones) {
+				for(var i = 0; i < newSmartphones.length; i++) {
+					var updatedSmartphone = newSmartphones[i];
+					var smartphone = getExistingSmartphone(newSmartphones[i]) || newSmartphones[i];
+					
+					// Create a Leaflet marker if the smarthpone does not have one yet
+					if(!smartphone.leafletMarker) {
+						createMarkerForSmartphone(smartphone);
+						
+						currentSmartphones.push(smartphone);
+					}
+						
+					// Update the smartphone position
+					smartphone.leafletMarker.setLatLng(new L.LatLng(updatedSmartphone.position[1], updatedSmartphone.position[0]));
+					
+					smartphone.leafletMarker.addTo(map);
+				}
+				
+				console.log("Markers updated!");
+			}
+			function createMarkerForSmartphone(smartphone) {
+				// Create a map marker for this smartphone
+				smartphone.leafletMarker = L.circle(
+					[smartphone.position[1], smartphone.position[0]],
+					0.25,
+					{
+						color: randomColor(),
+						fillColor: randomColor()
+					}
+				).bindPopup(smartphone.name);
+			}
+			
+			// --------
+			// Helper functions
+			// --------
+			function randomColor() {
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				
+				return "rgb(" + r + ", " + g + ", " + b + ")";
+			}
+			function getExistingSmartphone(smartphone) {
+				for(var i = 0; i < currentSmartphones.length; i++) {
+					if(smartphone.name == currentSmartphones[i].name)
+						return currentSmartphones[i];
+				}
+				
+				return null;
+			}
 		</script>
 	</body>
 </html>
