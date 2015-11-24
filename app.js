@@ -1,6 +1,11 @@
 var express = require("express");
 var request = require("request");
 
+// These properties can be used to connect to the Web Asset Service
+var customer = "bedrijvendag";
+var host = "movin.io";
+var apiKey = "564ef5ca1ca7855c244677eb"; // !!! You must append this key to every request as a URL parameter !!!
+
 var app = express();
 
 // Retrieves a single smartphone
@@ -28,16 +33,6 @@ app.get("/getsmartphones", function(req, res) {
 			position: [6.079271241290334, 52.501241625059666],
 			floor: 5
 		}
-	]);
-});
-
-// Gets the complete movement history for a single smartphone.
-app.get("/smartphonehistory/:name", function(req, res) {
-	// Dummy data
-	res.send([
-		[6.079281241290334, 52.501251625059666, 5],
-		[6.079281241290334, 52.501251625059666, 5],
-		[6.079281241290334, 52.501251625059666, 5]
 	]);
 });
 

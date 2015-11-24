@@ -100,6 +100,10 @@
 			// --------
 			// Leaflet functions
 			// --------
+			
+			// Updates all smartphone markers on the map.
+			// This function will check if a marker was already added for a smartphone.
+			// In this case it will not create a new marker but will instead update the position.
 			function updateMapMarkers(newSmartphones) {
 				for(var i = 0; i < newSmartphones.length; i++) {
 					var updatedSmartphone = newSmartphones[i];
@@ -120,6 +124,7 @@
 				
 				console.log("Markers updated!");
 			}
+			// Creates a marker for a smartphone.
 			function createMarkerForSmartphone(smartphone) {
 				// Create a map marker for this smartphone
 				smartphone.leafletMarker = L.circle(
@@ -135,6 +140,8 @@
 			// --------
 			// Helper functions
 			// --------
+			
+			// Gets a random color in the format rgb(#,#,#)
 			function randomColor() {
 				var r = Math.floor(Math.random() * 255);
 				var g = Math.floor(Math.random() * 255);
@@ -142,6 +149,9 @@
 				
 				return "rgb(" + r + ", " + g + ", " + b + ")";
 			}
+			// Checks if the given smartphone is already known by this website.
+			// If it is it will return the already existing smartphone.
+			// If it is unknown it will return null.
 			function getExistingSmartphone(smartphone) {
 				for(var i = 0; i < currentSmartphones.length; i++) {
 					if(smartphone.name == currentSmartphones[i].name)
